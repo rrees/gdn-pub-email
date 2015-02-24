@@ -10,4 +10,4 @@ class ContentSummary(ndb.Model):
 	byline = ndb.StringProperty(required=True)
 	standfirst = ndb.TextProperty(required=True)
 	link_text = ndb.StringProperty(required=True)
-	tags = ndb.StringProperty(required=True, repeated=True)
+	tags = ndb.StringProperty(repeated=True)
