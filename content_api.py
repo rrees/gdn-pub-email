@@ -60,7 +60,9 @@ def read(content_id, params=None):
 
 def search(query):
 	url = "http://{host}/search?{params}".format(host=capi_host(),
-		params=urllib.urlencode(query))
+		params=urllib.urlencode(add_api_key(query)))
+
+	logging.info(url)
 
 	cached_data = memcache.get(url)
 

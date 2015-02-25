@@ -3,6 +3,7 @@ import jinja2
 import os
 import json
 import logging
+
 from urllib import quote, urlencode
 from google.appengine.api import urlfetch
 
@@ -14,7 +15,9 @@ jinja_environment = jinja2.Environment(
 class LatestContent(webapp2.RequestHandler):
 	def get(self):
 		
-		result = content_api.search({})
+		result = content_api.search({'show-fields': 'headline,trailText,linkText',
+			'show-tags': 'keyword',
+			})
 
 		logging.info(result)
 
