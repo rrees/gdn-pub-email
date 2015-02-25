@@ -28,13 +28,13 @@ def summarise_content(content):
 		id=content['id'],
 		url=content['webUrl'],
 		headline=content['fields']['headline'],
-		standfirst=content['fields']['standfirst'],
 		link_text=content['fields']['trailText'],
 		tags=summarise_tags(content),
 		)
 
-	if 'byline' in content['fields']:
-		summary.byline=content['fields']['byline']
+	for field in ['byline', 'standfirst']:
+		if field in content['fields']:
+			setattr(summary, field, content['fields'][field])
 
 	return summary
 
@@ -55,10 +55,10 @@ class LatestContent(webapp2.RequestHandler):
 		content = [summarise_content(c) for c in data.get('response', {}).get('results', [])]
 		#logging.info(content)
 
-		new_content = [c for c in content if not models.ContentSummary.get_by_id(c.key.id())]
+		new_content = [c.put() for c in content if not models.ContentSummary.get_by_id(c.key.id())]
 		logging.info(new_content)
 
-		self.response.out.write("Hello world")
+		self.response.out.write("{0} new items found".format(len(new_content)))
 
 app = webapp2.WSGIApplication([webapp2.Route(r'/tasks/latest', handler=LatestContent)],
                               debug=True)
