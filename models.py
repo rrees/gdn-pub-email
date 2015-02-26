@@ -11,3 +11,4 @@ class ContentSummary(ndb.Model):
 	standfirst = ndb.TextProperty()
 	link_text = ndb.StringProperty(required=True)
 	tags = ndb.StringProperty(repeated=True)
+	sent = ndb.BooleanProperty(required=True, default=False)
