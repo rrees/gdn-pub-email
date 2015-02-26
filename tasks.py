@@ -12,6 +12,7 @@ from google.appengine.api import mail
 
 import content_api
 import models
+import configuration
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
@@ -79,6 +80,11 @@ class SendEmails(webapp2.RequestHandler):
 		for content in unsent_content:
 			logging.info(create_summary_email(content))
 			#mail.send_email(sender, recipient, content.headline, create_summary_email(content))
+
+		content = unsent_content[0]
+		sender = configuration.lookup('EMAIL_FROM')
+		recipient = configuration.lookup('EMAIL_TO')
+		mail.send_mail(sender, recipient, content.headline, create_summary_email(content))
 		self.response.out.write("{0} content emails sent".format(len(unsent_content)))
 
 app = webapp2.WSGIApplication([
