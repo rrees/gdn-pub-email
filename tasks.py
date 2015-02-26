@@ -8,6 +8,7 @@ from urllib import quote, urlencode
 
 from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
+from google.appengine.api import mail
 
 import content_api
 import models
@@ -38,6 +39,12 @@ def summarise_content(content):
 
 	return summary
 
+def create_summary_email(content):
+	return '''
+	Headline: {headline}
+
+	Tags: {tags}
+	'''.format(headline=content.headline.encode('utf-8'), tags=", ".join(content.tags))
 class LatestContent(webapp2.RequestHandler):
 	def get(self):
 		
@@ -64,7 +71,11 @@ class SendEmails(webapp2.RequestHandler):
 	def get(self):
 
 		unsent_content = [c for c in models.ContentSummary.query(models.ContentSummary.sent == False)]
-		logging.info(unsent_content)
+		#logging.info(unsent_content)
+
+		for content in unsent_content:
+			logging.info(create_summary_email(content))
+			#mail.send_email(sender, recipient, content.headline, create_summary_email(content))
 		self.response.out.write("{0} content emails sent".format(len(unsent_content)))
 
 app = webapp2.WSGIApplication([
