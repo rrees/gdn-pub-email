@@ -60,5 +60,14 @@ class LatestContent(webapp2.RequestHandler):
 
 		self.response.out.write("{0} new items found".format(len(new_content)))
 
-app = webapp2.WSGIApplication([webapp2.Route(r'/tasks/latest', handler=LatestContent)],
+class SendEmails(webapp2.RequestHandler):
+	def get(self):
+
+		unsent_content = [c for c in models.ContentSummary.query(models.ContentSummary.sent == False)]
+		logging.info(unsent_content)
+		self.response.out.write("{0} content emails sent".format(len(unsent_content)))
+
+app = webapp2.WSGIApplication([
+	webapp2.Route(r'/tasks/send', handler=SendEmails),
+	webapp2.Route(r'/tasks/latest', handler=LatestContent),],
                               debug=True)
