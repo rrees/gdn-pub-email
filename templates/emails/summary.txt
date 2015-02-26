@@ -1,5 +1,21 @@
+# Key Links
+
+Live: {{content.url}}
+
+Preview: {{content.preview_url}}
+
+# Content Information
+
 Headline: {{content.headline}}
 
 {% if content.byline %}
 Byline: {{content.byline}}
 {% endif %}
+
+Trail text: {{content.trail_text}}
+
+{% if content.standfirst %}
+Standfirst: {{content.standfirst}}
+{% endif %}
+
+Tags: {{content.tags|join(", ")}}

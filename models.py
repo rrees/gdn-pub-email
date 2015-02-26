@@ -9,6 +9,6 @@ class ContentSummary(ndb.Model):
 	headline = ndb.StringProperty(required=True)
 	byline = ndb.StringProperty()
 	standfirst = ndb.TextProperty()
-	link_text = ndb.StringProperty(required=True)
+	trail_text = ndb.StringProperty(required=True)
 	tags = ndb.StringProperty(repeated=True)
 	sent = ndb.BooleanProperty(required=True, default=False)

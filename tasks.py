@@ -29,7 +29,7 @@ def summarise_content(content):
 		id=content['id'],
 		url=content['webUrl'],
 		headline=content['fields']['headline'],
-		link_text=content['fields']['trailText'],
+		trail_text=content['fields']['trailText'],
 		tags=summarise_tags(content),
 		)
 
@@ -41,6 +41,8 @@ def summarise_content(content):
 
 def create_summary_email(content):
 	template = jinja_environment.get_template('emails/summary.txt')
+
+	content.preview_url = content.url.replace('www.theguardian', 'preview.gutools.co.uk')
 		
 	template_values = {'content': content}
 
