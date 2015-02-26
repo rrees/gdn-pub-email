@@ -56,6 +56,7 @@ class LatestContent(webapp2.RequestHandler):
 		required_tags='keyword'
 		result = content_api.search({'show-fields': required_fields,
 			'show-tags': required_tags,
+			'page-size': 20,
 			})
 
 		if not result:
@@ -67,7 +68,7 @@ class LatestContent(webapp2.RequestHandler):
 		#logging.info(content)
 
 		new_content = [c.put() for c in content if not models.ContentSummary.get_by_id(c.key.id())]
-		logging.info(new_content)
+		#logging.info(new_content)
 
 		self.response.out.write("{0} new items found".format(len(new_content)))
 
@@ -77,14 +78,12 @@ class SendEmails(webapp2.RequestHandler):
 		unsent_content = [c for c in models.ContentSummary.query(models.ContentSummary.sent == False)]
 		#logging.info(unsent_content)
 
-		for content in unsent_content:
-			logging.info(create_summary_email(content))
-			#mail.send_email(sender, recipient, content.headline, create_summary_email(content))
-
-		content = unsent_content[0]
 		sender = configuration.lookup('EMAIL_FROM')
 		recipient = configuration.lookup('EMAIL_TO')
-		mail.send_mail(sender, recipient, content.headline, create_summary_email(content))
+
+		for content in unsent_content:
+			mail.send_mail(sender, recipient, content.headline, create_summary_email(content))
+
 		self.response.out.write("{0} content emails sent".format(len(unsent_content)))
 
 app = webapp2.WSGIApplication([
