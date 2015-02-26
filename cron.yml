@@ -1,0 +1,7 @@
+cron:
+- description: scan for new content
+  url: /tasks/latest
+  schedule: every 1 minutes
+- description: send new content emails
+  url: /tasks/send
+  schedule: every 2 minutes
