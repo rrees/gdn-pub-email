@@ -83,6 +83,8 @@ class SendEmails(webapp2.RequestHandler):
 
 		for content in unsent_content:
 			mail.send_mail(sender, recipient, content.headline, create_summary_email(content))
+			content.sent=True
+			content.put()
 
 		self.response.out.write("{0} content emails sent".format(len(unsent_content)))
 
