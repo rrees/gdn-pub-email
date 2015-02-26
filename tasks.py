@@ -40,11 +40,12 @@ def summarise_content(content):
 	return summary
 
 def create_summary_email(content):
-	return '''
-	Headline: {headline}
+	template = jinja_environment.get_template('emails/summary.txt')
+		
+	template_values = {'content': content}
 
-	Tags: {tags}
-	'''.format(headline=content.headline.encode('utf-8'), tags=", ".join(content.tags))
+	return template.render(template_values)
+
 class LatestContent(webapp2.RequestHandler):
 	def get(self):
 		
