@@ -30,7 +30,8 @@ def summarise_content(content):
 		id=content['id'],
 		url=content['webUrl'],
 		headline=content['fields']['headline'],
-		trail_text=content['fields']['trailText'],
+		trail_text=content['fields']['trailText'][:500],
+		production_office=content['fields'].get('productionOffice', 'UK'),
 		tags=summarise_tags(content),
 		)
 
@@ -52,7 +53,7 @@ def create_summary_email(content):
 class LatestContent(webapp2.RequestHandler):
 	def get(self):
 		
-		required_fields='headline,trailText,byline,standfirst'
+		required_fields='headline,trailText,byline,standfirst,productionOffice'
 		required_tags='keyword'
 		result = content_api.search({'show-fields': required_fields,
 			'show-tags': required_tags,
